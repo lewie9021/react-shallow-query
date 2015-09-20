@@ -1,0 +1,30 @@
+{
+  "name": "react-shallow-query",
+  "version": "0.0.1",
+  "description": "A React utility that makes querying a shallow rendered component easier.",
+  "main": "lib/index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile",
+    "dev": "babel-node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lewie9021/react-shallow-query.git"
+  },
+  "keywords": [
+    "react",
+    "shallow-render",
+    "query",
+    "testing"
+  ],
+  "author": "Lewis Barnes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lewie9021/react-shallow-query/issues"
+  },
+  "homepage": "https://github.com/lewie9021/react-shallow-query#readme"
+}
