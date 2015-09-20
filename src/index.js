@@ -51,14 +51,22 @@ function findResults(objects = [], matcher, fragment, recursive) {
 
     // TODO: Use Array.reduce.
     objects.forEach((object) => {
-        var {children} = object.props;
-        var foundResults;
+        var children, foundResults;
 
+        // Ignore objects that aren't objects (e.g. text).
+        if (typeof object != "object")
+            return;
+        
+        ({children} = object.props);
+        
         if (matcher(object, fragment))
             results.push(object);
         
         if (!children || !recursive)
             return;
+        
+        if (!Array.isArray(children))
+            children = [children];
 
         foundResults = findResults(children, matcher, fragment, recursive);
 
