@@ -33,8 +33,13 @@ function ReactShallowQuery(object, query) {
         }
         
         results.forEach((result) => {
-            var objects = (index ? result.props.children : [result]);
-            var foundResults = findResults(objects, matcher, fragment, recursive);
+            var objects = (index ? result.props.children : result);
+            var foundResults;
+
+            if (!Array.isArray(objects))
+                objects = [objects];
+
+            foundResults = findResults(objects, matcher, fragment, recursive);
 
             // Append the newly found results to the 'newResults' array.
             newResults.push.apply(newResults, foundResults);
@@ -53,8 +58,8 @@ function findResults(objects = [], matcher, fragment, recursive) {
     objects.forEach((object) => {
         var children, foundResults;
 
-        // Ignore objects that aren't objects (e.g. text).
-        if (typeof object != "object")
+        // Ignore objects that aren't objects (e.g. text) or null values.
+        if (!object || typeof object != "object")
             return;
         
         ({children} = object.props);
