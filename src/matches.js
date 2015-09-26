@@ -1,7 +1,7 @@
 function displayName(object, fragment) {
     var {type} = object;
-
-    return (type && type.displayName == fragment);
+    
+    return ((type && type.displayName || type.name) == fragment);
 }
 
 function className(object, fragment) {
