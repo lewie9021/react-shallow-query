@@ -8,6 +8,9 @@ const SYMBOL_MATCHES = {
 
 // TODO: Use better variables names.
 function ReactShallowQuery(object, query) {
+    if (typeof query !== "string")
+        throw new Error("You must provide a query.");
+    
     var results = Array.isArray(object) ? object : [object];
     var fragments = query.split(" ");
     var recursive = true;
