@@ -46,36 +46,40 @@ describe("React Shallow Query", function() {
         expect(Array.isArray(results)).to.eq(true);
     });
 
-    it("should select elements by class name using a period", function() {
-        const {output} = renderComponent(Comment);
-        const results = $(output, ".author");
-
-        expect(results.length).to.be.at.least(1);
-        results.forEach((result) => expect(result.props.className).to.contain("author"));
-    });
-
-    it("should select elements by id using a hash", function() {
-        const {output} = renderComponent(Comment);
-        const results = $(output, "#message");
-
-        expect(results.length).to.be.at.least(1);
-        results.forEach((result) => expect(result.props.id).to.eq("message"));
-    });
-
-    it("should provide support for selecting components by name", function() {
-        const {output} = renderComponent(Comments);
-        const results = $(output, "Comment");
-
-        expect(results.length).to.be.at.least(1);
-        results.forEach((result) => expect(result.type.name).to.eq("Comment"));
-    });
-
-    it("should allow selecting of elements by tag", function() {
-        const {output} = renderComponent(Comments);
-        const results = $(output, "li");
-
-        expect(results.length).to.be.at.least(1);
-        results.forEach((result) => expect(result.type).to.eq("li"));
-    });
+    describe("Basic Querying", function() {
     
+        it("should select elements by class name using a period", function() {
+            const {output} = renderComponent(Comment);
+            const results = $(output, ".author");
+
+            expect(results.length).to.be.at.least(1);
+            results.forEach((result) => expect(result.props.className).to.contain("author"));
+        });
+
+        it("should select elements by id using a hash", function() {
+            const {output} = renderComponent(Comment);
+            const results = $(output, "#message");
+
+            expect(results.length).to.be.at.least(1);
+            results.forEach((result) => expect(result.props.id).to.eq("message"));
+        });
+
+        it("should provide support for selecting components by name", function() {
+            const {output} = renderComponent(Comments);
+            const results = $(output, "Comment");
+
+            expect(results.length).to.be.at.least(1);
+            results.forEach((result) => expect(result.type.name).to.eq("Comment"));
+        });
+
+        it("should allow selecting of elements by tag", function() {
+            const {output} = renderComponent(Comments);
+            const results = $(output, "li");
+
+            expect(results.length).to.be.at.least(1);
+            results.forEach((result) => expect(result.type).to.eq("li"));
+        });
+
+    });
+        
 });
