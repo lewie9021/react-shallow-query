@@ -21,7 +21,7 @@ function type(object, fragment) {
 }
 
 function id(object, fragment) {
-    return (object.props.id == fragment);
+    return (object.props.id == fragment.slice(1));
 }
 
 export default {
