@@ -19,7 +19,6 @@ function ReactShallowQuery(object, query) {
     // TODO: Use Array.reduce.
     fragments.forEach((fragment, index) => {
         var prefix = fragment.charAt(0);
-        var newResults = [];
         var matcher;
         
         if (fragment == ">") 
@@ -35,20 +34,15 @@ function ReactShallowQuery(object, query) {
             matcher = Matches[upperCase ? "displayName" : "type"];
         }
         
-        results.forEach((result) => {
-            var objects = (index ? result.props.children : result);
-            var foundResults;
+        results = results.reduce((elements, element) => {
+            var objects = (index ? element.props.children : element);
 
             if (!Array.isArray(objects))
                 objects = [objects];
-
-            foundResults = findResults(objects, matcher, fragment, recursive);
-
-            // Append the newly found results to the 'newResults' array.
-            newResults.push.apply(newResults, foundResults);
-        });
-
-        results = newResults;
+            
+            // Append the newly found elements.
+            return elements.concat(findResults(objects, matcher, fragment, recursive));
+        }, []);
     });
 
     return results;
