@@ -1,9 +1,9 @@
 import React from "react";
 
-export function Comments() {
+export function Comments({comments = []}) {
     return (
         <ul>
-            <Comment author="John Smith" message="Hello World" />
+            {comments.map((comment, index) => <Comment key={index} {...comment} />)}
             <li className="custom-comment">
                 <h3>Some Author</h3>
             </li>

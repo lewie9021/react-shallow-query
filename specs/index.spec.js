@@ -3,6 +3,10 @@ import { renderComponent } from "./helpers";
 import { Comments, Comment } from "./components";
 import $ from "../src";
 
+const comments = [
+    {author: "John Smith", message: "Hello World"}
+];
+
 describe("React Shallow Query", function() {
 
     it("should throw if 'query' isn't a string", function() {
@@ -43,7 +47,7 @@ describe("React Shallow Query", function() {
         });
 
         it("should provide support for selecting components by name", function() {
-            const {output} = renderComponent(Comments);
+            const {output} = renderComponent(Comments, {comments});            
             const results = $(output, "Comment");
 
             expect(results.length).to.eq(1);
@@ -51,7 +55,7 @@ describe("React Shallow Query", function() {
         });
 
         it("should allow selecting of elements by tag", function() {
-            const {output} = renderComponent(Comments);
+            const {output} = renderComponent(Comments, {comments});
             const results = $(output, "li");
 
             expect(results.length).to.eq(2);
@@ -62,7 +66,7 @@ describe("React Shallow Query", function() {
 
     describe("Advanced Querying", function() {
 
-        it("should query elements nested within the current matches when using spaces", function() {
+        it("should only query elements nested within the current match when a ' ' is used", function() {
             const {output} = renderComponent(Comment);
             const results = $(output, "span strong");
 
@@ -70,7 +74,7 @@ describe("React Shallow Query", function() {
             results.forEach((result) => expect(result.type).to.eq("strong"));
         });
 
-        it("should only query direct decendants when a '>' is used", function() {
+        it("should only query direct decendants of the current match when a '>' is used", function() {
             const {output} = renderComponent(Comment);
             const results = $(output, "span > strong");
 
