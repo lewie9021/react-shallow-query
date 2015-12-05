@@ -55,34 +55,30 @@ function ReactShallowQuery(object, query) {
 };
 
 function findResults(objects = [], matcher, fragment, recursive) {
-    var results = [];
+    if (!Array.isArray(objects))
+        objects = [objects];
 
-    // TODO: Use Array.reduce.
-    objects.forEach((object) => {
-        var children, foundResults;
+    return objects.reduce((results, object) => {
+        // Ignore objects that aren't components (e.g. text) or null values.
+        if (!object || typeof object !== "object")
+            return results;
 
-        // Ignore objects that aren't objects (e.g. text) or null values.
-        if (!object || typeof object != "object")
-            return;
-        
-        ({children} = object.props);
-        
+        // This covers the case where array.map is used when composing components.
+        if (Array.isArray(object))
+            return results.concat(findResults(object, matcher, fragment, recursive));
+
+        // Check if the object is valid and append it to our results if true.
         if (matcher(object, fragment))
             results.push(object);
-        
-        if (!children || !recursive)
-            return;
-        
-        if (!Array.isArray(children))
-            children = [children];
 
-        foundResults = findResults(children, matcher, fragment, recursive);
+        const {props} = object;
+        
+        if (!props || !props.children || !recursive)
+            return results;
 
         // Append the newly found results onto the 'results' array.
-        results.push.apply(results, foundResults);
-    });
-
-    return results;
+        return results.concat(findResults(props.children, matcher, fragment, recursive));
+    }, []);
 }
 
 export default ReactShallowQuery;
