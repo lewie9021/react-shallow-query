@@ -33,7 +33,9 @@ function ReactShallowQuery(object, query) {
             // Handle default and custom React component names.
             matcher = Matches[upperCase ? "displayName" : "type"];
         }
-        
+
+        // Alter the accumulative results array based on the current fragement.
+        // This may add new elements or remove existing elements within the array.
         results = results.reduce((elements, element) => {
             var objects = (index ? element.props.children : element);
 
