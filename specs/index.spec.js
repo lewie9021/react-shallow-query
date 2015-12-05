@@ -7,10 +7,12 @@ function Comment({author, message}) {
     return (
         <li className="comment">
             <span className="author">
-                {author}
+                <em>
+                    <strong>Author: </strong>{author}
+                </em>
             </span>
             <span id="message">
-                {message}
+                <strong>Message: </strong>{message}
             </span>
         </li>
     );
@@ -20,7 +22,12 @@ function Comments() {
     return (
         <ul>
             <Comment author="John Smith" message="Hello World" />
-            <li>Some other item</li>
+            <li className="custom-comment">
+                <h3>Some Author</h3>
+            </li>
+            <li className="custom-comment">
+                <strong>Some Other Author</strong>
+            </li>
         </ul>
     );
 }
@@ -52,7 +59,7 @@ describe("React Shallow Query", function() {
             const {output} = renderComponent(Comment);
             const results = $(output, ".author");
 
-            expect(results.length).to.be.at.least(1);
+            expect(results.length).to.eq(1);
             results.forEach((result) => expect(result.props.className).to.contain("author"));
         });
 
@@ -60,7 +67,7 @@ describe("React Shallow Query", function() {
             const {output} = renderComponent(Comment);
             const results = $(output, "#message");
 
-            expect(results.length).to.be.at.least(1);
+            expect(results.length).to.eq(1);
             results.forEach((result) => expect(result.props.id).to.eq("message"));
         });
 
@@ -68,7 +75,7 @@ describe("React Shallow Query", function() {
             const {output} = renderComponent(Comments);
             const results = $(output, "Comment");
 
-            expect(results.length).to.be.at.least(1);
+            expect(results.length).to.eq(1);
             results.forEach((result) => expect(result.type.name).to.eq("Comment"));
         });
 
@@ -76,10 +83,30 @@ describe("React Shallow Query", function() {
             const {output} = renderComponent(Comments);
             const results = $(output, "li");
 
-            expect(results.length).to.be.at.least(1);
+            expect(results.length).to.eq(2);
             results.forEach((result) => expect(result.type).to.eq("li"));
         });
 
     });
+
+    describe("Advanced Querying", function() {
+
+        it("should query elements nested within the current matches when using spaces", function() {
+            const {output} = renderComponent(Comment);
+            const results = $(output, "span strong");
+
+            expect(results.length).to.eq(2);
+            results.forEach((result) => expect(result.type).to.eq("strong"));
+        });
+
+        it("should only query direct decendants when a '>' is used", function() {
+            const {output} = renderComponent(Comment);
+            const results = $(output, "span > strong");
+
+            expect(results.length).to.eq(1);
+            results.forEach((result) => expect(result.type).to.eq("strong"));
+        });
         
+    });
+    
 });
