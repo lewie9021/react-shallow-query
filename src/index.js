@@ -25,20 +25,11 @@ function ReactShallowQuery(objects, query) {
             return results;
         }
 
-        const prefix = fragment.charAt(0);
-        let matcher;
+        // Parse the fragment to figure out what matcher to use.
+        // The matcher is used on each component to figure out if meets the query criteria.
+        const matcher = getMatcher(fragment);
 
-        // Handle prefix symbols.
-        if (SYMBOL_MATCHES[prefix]) {
-            matcher = SYMBOL_MATCHES[prefix];
-        } else {
-            let upperCase = (prefix === prefix.toUpperCase());
-
-            // Handle default and custom React component names.
-            matcher = Matches[upperCase ? "displayName" : "type"];
-        }
-
-        // Alter the accumulative results array based on the current fragement.
+        // Alter the accumulative results array based on the current fragment.
         // This may add new elements or remove existing elements within the array.
         return results.reduce((elements, element) => {
             let objects = (index ? element.props.children : element);
@@ -51,6 +42,21 @@ function ReactShallowQuery(objects, query) {
         }, []);
     }, objects);
 };
+
+function getMatcher(fragment) {
+    const prefix = fragment.charAt(0);
+
+    // Handle symbols (hash = id | period = className).
+    if (SYMBOL_MATCHES[prefix])
+        return SYMBOL_MATCHES[prefix];
+
+    // Handle custom React components.
+    if (prefix === prefix.toUpperCase())
+        return Matches.displayName;
+
+    // It must be a default React component (div, span, li, etc).
+    return Matches.type;
+}
 
 function findResults(objects = [], matcher, fragment, recursive) {
     if (!Array.isArray(objects))
