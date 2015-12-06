@@ -92,6 +92,20 @@ const [author] = $(comments, ".author");
 console.log(author.props.children === "Lewis Barnes") // true
 ```
 
+### Query String
+
+There are 4 different matchers supported by react-shallow-query:
+
+**Class Name**
+
+You can query a component by class name. This is similar to jQuery, only it looks within the value of props.className for each component.
+
+```js
+// Note: We are using the Comments component defined above for this example.
+// This will return an array of shallow rendered React components containing the class name of 'author'.
+const authors = $(comments, ".author");
+```
+
 ### Future Improvements
 
 - Provide syntax that allows more specificity. For example "span.message".
