@@ -62,7 +62,7 @@ import $ from "react-shallow-query";
 function Comments() {
     return (
         <div className="comments">
-            <div className="comment">
+            <div id="comment-1" className="comment">
                 <span className="author">
                     Lewis Barnes
                 </span>
@@ -70,7 +70,7 @@ function Comments() {
                     Hello world!
                 </span>
             </div>
-            <div className="comment">
+            <div id="comment-2" className="comment">
                 <span className="author">
                     John Smith
                 </span>
@@ -104,6 +104,16 @@ You can query a component by class name. This is similar to jQuery, only it look
 // Note: We are using the Comments component defined above for this example.
 // This will return an array of shallow rendered React components containing the class name of 'author'.
 const authors = $(comments, ".author");
+```
+
+**ID**
+
+Just like you can in jQuery, you can also select elements by their id using the hash symbol. In React this the value assigned to props.id.
+
+```js
+// Note: We are using the Comments component defined above for this example.
+// This will return an array of shallow rendered React components with an id of 'comment-2'.
+const authors = $(comments, "#comment-2");
 ```
 
 ### Future Improvements
