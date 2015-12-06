@@ -94,7 +94,7 @@ console.log(author.props.children === "Lewis Barnes") // true
 
 ### Query String
 
-There are 4 different matchers supported by react-shallow-query:
+There are three different matchers supported by react-shallow-query:
 
 **Class Name**
 
@@ -114,6 +114,36 @@ Just like you can in jQuery, you can also select elements by their id using the 
 // Note: We are using the Comments component defined above for this example.
 // This will return an array of shallow rendered React components with an id of 'comment-2'.
 const [secondComment] = $(comments, "#comment-2");
+```
+
+**Component Name**
+
+It's also possible to query for components by their tag name. For custom components, this is either the displayName or the function name given on declaration.
+
+```js
+
+function Comment({messsage}) {
+    return (
+        <li className="comment">{message}</li>
+    )
+}
+
+function Comments() {
+    return (
+        <ul className="comments">
+            <Comment message="Hello World!" />
+            <Comment message="Hi there!" />
+        </ul>
+    );
+}
+
+const renderer = TestUtils.createRenderer();
+
+renderer.render(<Comments />);
+
+const comments = renderer.getRenderOutput();
+// This will return an array of shallow rendered React components with the name "Comment".
+const [firstComment] = $(comments, "Comment");
 ```
 
 ### Future Improvements
