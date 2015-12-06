@@ -7,22 +7,26 @@ const SYMBOL_MATCHES = {
 };
 
 // TODO: Use better variables names.
-function ReactShallowQuery(object, query) {
+function ReactShallowQuery(objects, query) {
     if (typeof query !== "string")
         throw new Error("You must provide a query.");
-    
-    var results = Array.isArray(object) ? object : [object];
-    var fragments = query.split(" ");
-    var recursive = true;
 
-    // Loop through each fragement.
-    // TODO: Use Array.reduce.
-    fragments.forEach((fragment, index) => {
-        var prefix = fragment.charAt(0);
-        var matcher;
-        
-        if (fragment == ">") 
-            return recursive = false;
+    if (!Array.isArray(objects))
+        objects = [objects];
+    
+    const fragments = query.split(" ");
+    let recursive = true;
+
+    // Loop through each fragments.
+    return fragments.reduce((results, fragment, index) => {
+        if (fragment == ">") {
+            recursive = false;
+            
+            return results;
+        }
+
+        const prefix = fragment.charAt(0);
+        let matcher;
 
         // Handle prefix symbols.
         if (SYMBOL_MATCHES[prefix]) {
@@ -36,8 +40,8 @@ function ReactShallowQuery(object, query) {
 
         // Alter the accumulative results array based on the current fragement.
         // This may add new elements or remove existing elements within the array.
-        results = results.reduce((elements, element) => {
-            var objects = (index ? element.props.children : element);
+        return results.reduce((elements, element) => {
+            let objects = (index ? element.props.children : element);
 
             if (!Array.isArray(objects))
                 objects = [objects];
@@ -45,9 +49,7 @@ function ReactShallowQuery(object, query) {
             // Append the newly found elements.
             return elements.concat(findResults(objects, matcher, fragment, recursive));
         }, []);
-    });
-
-    return results;
+    }, objects);
 };
 
 function findResults(objects = [], matcher, fragment, recursive) {
