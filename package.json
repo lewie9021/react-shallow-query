@@ -1,6 +1,6 @@
 {
   "name": "react-shallow-query",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A React utility that makes querying a shallow rendered component easier.",
   "main": "lib/index.js",
   "dependencies": {},
