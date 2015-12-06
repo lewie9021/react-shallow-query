@@ -9,8 +9,7 @@
     "chai": "3.3.0",
     "mocha": "2.3.3",
     "react": "0.14.0",
-    "react-addons-test-utils": "0.14.0",
-    "sinon": "1.17.1"
+    "react-addons-test-utils": "0.14.0"
   },
   "scripts": {
     "compile": "node_modules/.bin/babel -d lib/ src/",
