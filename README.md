@@ -113,7 +113,7 @@ Just like you can in jQuery, you can also select elements by their id using the 
 ```js
 // Note: We are using the Comments component defined above for this example.
 // This will return an array of shallow rendered React components with an id of 'comment-2'.
-const authors = $(comments, "#comment-2");
+const [secondComment] = $(comments, "#comment-2");
 ```
 
 ### Future Improvements
