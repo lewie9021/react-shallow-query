@@ -4,7 +4,7 @@ function displayName({type}, fragment) {
     if ((displayName || name) === fragment)
         return true;
 
-    // This is a hack for browsers that don't have Function.name (Internet Explorer).
+    // This is a fix for browsers that don't support Function.name (Internet Explorer).
     if (typeof name === "undefined") {
         const funcString = type.toString();
         const match = funcString.match(/function\s([^(]{1,})\(/);
