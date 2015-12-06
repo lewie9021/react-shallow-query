@@ -1,7 +1,18 @@
 function displayName({type}, fragment) {
     const {displayName, name} = type;
+    
+    if ((displayName || name) === fragment)
+        return true;
 
-    return ((displayName || name) == fragment);
+    // This is a hack for browsers that don't have Function.name (Internet Explorer).
+    if (typeof name === "undefined") {
+        const funcString = type.toString();
+        const match = funcString.match(/function\s([^(]{1,})\(/);
+        
+        return (match && match[1] === fragment);
+    }
+
+    return false;
 }
 
 function className(object, fragment) {
