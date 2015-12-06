@@ -13,74 +13,83 @@ $ npm install react-shallow-query
 My idea to create this module sprung from an article on [React Kung Fu](http://reactkungfu.com/2015/07/approaches-to-testing-react-components-an-overview/). One of the topics it talked about was the newly implemented shallow rendering functionality, introduced in React v0.13. Unfortunately, accessing nested components requires a series of _x.props.children_ calls in order to locate them. This felt awkward. Instead, I wanted to query the object returned from _getRenderOutput_ in a syntax I was familiar with. My solution was to mimic CSS-like selectors similar to jQuery. This helped to reduce the pain I had in examples such as the one below:
 
 ```js
-// CommentsList component structure.
-<div className="comments-list">
-    <div className="comment">
-        <span className="author">
-            Lewis Barnes
-        </span>
-        <span className="message">
-            Hello world!
-        </span>
-    </div>
-    <div className="comment">
-        <span className="author">
-            John Smith
-        </span>
-        <span className="message">
-            Hi there!
-        </span>
-    </div>
-</div>
+import React from "react";
+import TestUtils from "react-addons-test-utils";
 
-// Note: 'output' is an object returned from .getRenderOutput(), given the component tree above.
+function Comments() {
+    return (
+        <div className="comments">
+            <div className="comment">
+                <span className="author">
+                    Lewis Barnes
+                </span>
+                <span className="message">
+                    Hello world!
+                </span>
+            </div>
+            <div className="comment">
+                <span className="author">
+                    John Smith
+                </span>
+                <span className="message">
+                    Hi there!
+                </span>
+            </div>
+        </div>
+    );
+}
 
-var comments = output.props.children;
-var firstComment = comments.props.children[0];
-var author = firstComment.props.children[0];
+const renderer = TestUtils.createRenderer();
 
-console.log(author.props.children == "Lewis Barnes") // true 
+renderer.render(<Comments />);
+
+const comments = renderer.getRenderOutput();
+const [firstComment] = comments.props.children;
+const [author] = firstComment.props.children;
+
+console.log(author.props.children === "Lewis Barnes") // true
 ```
 
 ### Basic Example
 
-Below is an example of a simple React component called 'Comment':
+Using the same component from above, lets see what it looks like using react-shallow-query:
 
 ```js
-import React from "react/addons";
+import React from "react";
+import TestUtils from "react-addons-test-utils";
 import $ from "react-shallow-query";
 
-var { TestUtils } = React.addons;
-var renderer = TestUtils.createRenderer();
-var output, results;
-
-// Simple React comment component.
-var Comment = React.createClass({
-    render() {
-        return (
+function Comments() {
+    return (
+        <div className="comments">
             <div className="comment">
                 <span className="author">
-                    {this.props.author}
+                    Lewis Barnes
                 </span>
                 <span className="message">
-                    {this.props.message}
+                    Hello world!
                 </span>
             </div>
-        );
-    }
-});
+            <div className="comment">
+                <span className="author">
+                    John Smith
+                </span>
+                <span className="message">
+                    Hi there!
+                </span>
+            </div>
+        </div>
+    );
+}
 
-// Render the component (similar to to React.render).
-renderer.render(<Comment author="Lewis Barnes" message="Hello world!" />);
+const renderer = TestUtils.createRenderer();
 
-// Get the shallow rendered output.
-output = renderer.getRenderOutput();
+renderer.render(<Comments />);
 
-// Search through the output for components that have a className containing 'message'.
-results = $(output, ".message");
+const comments = renderer.getRenderOutput();
+const [author] = $(comments, ".author");
 
-// 'results' will contain an array of matching elements.
-console.log(results[0] == output.props.children[1]); // true
+console.log(author.props.children === "Lewis Barnes") // true
 ```
 
 ### Future Improvements
